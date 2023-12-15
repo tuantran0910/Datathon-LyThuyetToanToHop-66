@@ -16,6 +16,8 @@
         font-family: "Poppins", sans-serif;
         margin: 0;
         padding: 0;
+        background-color: #181818;
+        overflow-y: scroll;
       }
 
       .container {
@@ -27,27 +29,30 @@
 
       .box {
         width: min(95%, 800px);
-        height: 100vh;
         margin-top: 85px;
+        padding-top: 20px;
       }
 
       .bottom {
         position: fixed;
         bottom: 0;
-        padding-bottom: 5%;
-        background-color: white;
+        padding-bottom: 10px;
+        padding-top: 10px;
         width: min(95%, 800px);
+        background-color: #181818;
       }
 
       .message {
         margin: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
       }
 
       .usermessagediv {
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
         justify-content: flex-end;
-        float: right;
         gap: 5px;
       }
 
@@ -58,7 +63,6 @@
         border-radius: 20px;
         max-width: 400px;
         word-wrap: break-word;
-        float: right;
       }
 
       .uploadimg {
@@ -75,10 +79,12 @@
       }
 
       .appmessage {
-        background-color: #e5e5ea;
-        color: #000;
+        background-color: #242424;
+        color: white;
         padding: 0.5rem 0.875rem;
         border-radius: 20px;
+        max-width: 400px;
+        word-wrap: break-word;
       }
 
       .upper {
@@ -87,6 +93,7 @@
         padding-bottom: 170px;
         display: flex;
         flex-direction: column;
+        margin-bottom: 100px;
       }
 
       .upper::-webkit-scrollbar {
@@ -110,6 +117,7 @@
         width: 100%;
         padding: 3px;
         box-shadow: 1px 1px 5px #80808057;
+        background-color: #3b3abe;
       }
 
       #userinput {
@@ -118,6 +126,11 @@
         resize: none;
         outline: none;
         box-shadow: none;
+        max-height: 150px;
+      }
+
+      #userinput::-webkit-scrollbar {
+        width: 0 !important;
       }
 
       #fileInput {
@@ -169,6 +182,87 @@
         color: black;
         transition: cubic-bezier(0.075, 0.82, 0.165, 1);
       }
+
+      .botintroduction {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-left: 50px;
+        margin-right: 50px;
+        border-radius: 0.6rem;
+        background-color: #242424;
+        padding: 1rem;
+        color: white;
+      }
+
+      .botintroduction > div {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+      }
+
+      .botimage {
+        border-radius: 30%;
+        color: transparent;
+        display: block;
+        border: #313535 5px solid;
+        width: 80px;
+        height: 80px;
+      }
+
+      .botcontent {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 0.25rem;
+      }
+
+      .botname {
+        font-size: 1.5rem;
+        font-weight: bold;
+      }
+
+      .botoperated {
+        color: #a5acac;
+      }
+
+      .teamname {
+        color: #9494fa;
+        font-weight: 700;
+      }
+
+      .chatbotheader {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+        color: white;
+        align-items: center;
+        margin-left: 5px;
+        font-weight: 700;
+      }
+
+      .chatbotheaderimage {
+        border-radius: 30%;
+        color: transparent;
+        display: block;
+        border: #313535 5px solid;
+        width: 30px;
+        height: 30px;
+      }
+
+      .boxchat {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        padding: 0.5rem 0.875rem;
+        border-radius: 25px;
+        border: 1px solid #d1d5db;
+        color: white;
+      }
+
+      .attachmentList::-webkit-scrollbar {
+        width: 0 !important;
+      }
     </style>
   </head>
 
@@ -184,8 +278,8 @@
             alt="Flowbite Logo"
           />
           <span
-            class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white"
-            >Autochat Bot</span
+            class="self-center text-2xl font-bold whitespace-nowrap dark:text-white"
+            >LTTTH GPT</span
           >
         </a>
       </div>
@@ -193,6 +287,26 @@
 
     <div class="container">
       <div class="box">
+        <div class="botintroduction">
+          <div>
+            <img
+              src="https://psc2.cf2.poecdn.net/e624182724b2f7d087d86e14094be569c56fc207/_next/static/media/assistant.b077c338.svg"
+              alt="Assistant"
+              class="botimage"
+            />
+            <div class="botcontent">
+              <h2 class="botname">Tuan Dep Trai</h2>
+              <div class="botoperated">
+                Operated by <span class="teamname">@LTTTH</span>
+              </div>
+            </div>
+          </div>
+          <div>
+            General-purpose assistant bot with strengths in programming-related
+            tasks and non-English languages. Powered by gpt-3.5-turbo.
+          </div>
+        </div>
+
         <div class="upper" id="upperid">
           <span class="downwarning">Type your message in box below.</span>
         </div>
@@ -208,14 +322,12 @@
         <div class="bottom">
           <form id="userinputform">
             <label for="chat" class="sr-only">Your message</label>
-            <div
-              class="flex gap-6 items-center px-3 py-2 rounded-full bg-red-500g border border-gray-300 bg-gray-50 dark:bg-gray-700"
-            >
+            <div class="boxchat">
               <div class="flex-1" id="inputarea">
                 <textarea
                   id="userinput"
                   rows="1"
-                  class="block mx-4 p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  class="block mx-4 p-2.5 w-full text-sm text-white-900 bg-white rounded-lg border-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="Your message..."
                 ></textarea>
               </div>
@@ -223,7 +335,7 @@
                 <label for="fileInput">
                   <button
                     id="attachbtn"
-                    class="inline-flex justify-center p-2 text-blue-600 rounded-full cursor-pointer hover:bg-blue-100 dark:text-blue-500 dark:hover:bg-gray-600"
+                    class="inline-flex justify-center p-2 bg-blue-100 rounded-full cursor-pointer hover:bg-blue-100 dark:text-blue-500 dark:hover:bg-gray-600"
                     type="button"
                     onclick="uploadFile()"
                   >
@@ -231,7 +343,7 @@
                       aria-hidden="true"
                       viewBox="0 0 15 26"
                       xmlns="http://www.w3.org/2000/svg"
-                      class="w-6 h-6"
+                      class="w-6 h-6 text-white-600"
                     >
                       <path
                         d="M7.11 26C3.287 26 .178 22.757.178 18.772V5.312C.179 2.382 2.469 0 5.285 0 6.66 0 7.947.559 8.913 1.573a5.38 5.38 0 0 1 1.478 3.74v11.439c0 1.872-1.472 3.395-3.282 3.395-1.809 0-3.281-1.523-3.281-3.395V8.333a1 1 0 0 1 2 0v8.418c0 .769.575 1.394 1.281 1.394.707 0 1.282-.625 1.282-1.394V5.31c0-.894-.328-1.732-.926-2.36a2.998 2.998 0 0 0-2.18-.952c-1.713 0-3.106 1.485-3.106 3.312v13.46c0 2.882 2.212 5.228 4.93 5.228 2.72 0 4.932-2.346 4.932-5.228V8.333a1 1 0 0 1 2 0v10.439c0 3.985-3.109 7.228-6.932 7.228Z"
@@ -245,7 +357,7 @@
               <div>
                 <button
                   type="submit"
-                  class="inline-flex justify-center p-2 text-black-600 rounded-full cursor-pointer hover:bg-blue-500 hover:text-white dark:text-blue-500 dark:hover:bg-gray-600"
+                  class="inline-flex justify-center p-2 bg-blue-500 rounded-full cursor-pointer hover:bg-blue-500 hover:text-white dark:text-blue-500 dark:hover:bg-gray-600"
                   id="sendbtn"
                 >
                   <svg
@@ -274,10 +386,20 @@
     </div>
 
     <script>
+      const textarea = document.getElementById("userinput");
+      textarea.addEventListener("input", () => {
+        textarea.style.height = "auto";
+        textarea.style.height = textarea.scrollHeight + "px";
+      });
+
       // for scrolling messages
-      function scrollToBottom() {
+      /*function scrollToBottom() {
         var div = document.getElementById("upperid");
         div.scrollTop = div.scrollHeight;
+      }*/
+      function scrollToBottom() {
+        var body = document.body;
+        body.scrollTop = body.scrollHeight;
       }
       scrollToBottom();
 
@@ -393,6 +515,11 @@
         let userinputarea = document.getElementById("userinput");
         let upperdiv = document.getElementById("upperid");
 
+        // Check if userinput is empty and uploadedFiles is empty
+        if (userinput.trim() === "" && uploadedFiles.length === 0) {
+          return;
+        }
+
         sendbtn.disabled = true;
         userinputarea.disabled = true;
         document.getElementById("userinput").value = "";
@@ -425,17 +552,13 @@
           // Send image to server
           const formData = new FormData();
           formData.append("fileInput", image);
-
+          let userinput = document.getElementById("userinput").value;
+          let sendbtn = document.getElementById("sendbtn");
+          console.log(formData);
           const image_response = await fetch("http://127.0.0.1:5000/upload", {
             method: "POST",
             body: formData,
-          })
-            .then((response) => {
-              console.log(response);
-            })
-            .catch((error) => {
-              console.error("Error:", error);
-            });
+          });
 
           /*let image_response_json = await image_response.json();
           if (!image_response_json.response) {
@@ -453,7 +576,15 @@
             </div>`;
         }
 
-        console.log(userinput);
+        if (userinput.trim() === "") {
+          document.getElementById("userinput").placeholder = "Your message...";
+          sendbtn.disabled = false;
+          userinputarea.disabled = false;
+          uploadedFiles = [];
+          scrollToBottom();
+          return;
+        }
+
         uploadedFiles = [];
         scrollToBottom();
         const message_response = await fetch("http://127.0.0.1:5000/data", {
@@ -468,31 +599,37 @@
         document.getElementById("userinput").placeholder = "Your message...";
         if (message_response_json.response) {
           let message = message_response_json.message;
-          message = message.toString();
-          upperdiv.innerHTML =
-            upperdiv.innerHTML +
-            `<div class="message">
+          let message_list = message_response_json.list;
+
+          if (message_list) {
+            insertImages(message);
+          } else {
+            message = message.toString();
+            upperdiv.innerHTML =
+              upperdiv.innerHTML +
+              `<div class="message">
                 <div class="appmessagediv">
                     <div class="appmessage" id="temp">
 
                     </div>
                 </div>
             </div>`;
-          let temp = document.getElementById("temp");
-          let index = 0;
-          function displayNextLetter() {
-            scrollToBottom();
-            if (index < message.length) {
-              temp.innerHTML = temp.innerHTML + message[index];
-              index++;
-              setTimeout(displayNextLetter, 30);
-            } else {
-              temp.removeAttribute("id");
-              sendbtn.disabled = false;
-              userinputarea.disabled = false;
+            let temp = document.getElementById("temp");
+            let index = 0;
+            function displayNextLetter() {
+              scrollToBottom();
+              if (index < message.length) {
+                temp.innerHTML = temp.innerHTML + message[index];
+                index++;
+                setTimeout(displayNextLetter, 30);
+              } else {
+                temp.removeAttribute("id");
+                sendbtn.disabled = false;
+                userinputarea.disabled = false;
+              }
             }
+            displayNextLetter();
           }
-          displayNextLetter();
           scrollToBottom();
         } else {
           let message = message_response_json.message;
@@ -511,15 +648,79 @@
         scrollToBottom();
       };
 
+      const insertImages = async (urls) => {
+        let upperdiv = document.getElementById("upperid");
+        let sendbtn = document.getElementById("sendbtn");
+        let userinputarea = document.getElementById("userinput");
+        sendbtn.disabled = true;
+        userinputarea.disabled = true;
+
+        const formData = new FormData();
+        formData.append("urls", JSON.stringify(urls));
+        // Send urls to server
+        let image_response = await fetch("http://127.0.0.1:5000/getcloth", {
+          method: "POST",
+          body: formData,
+        });
+
+        let image_response_json = await image_response.json();
+        console.log(image_response_json);
+        if (image_response_json.response) {
+          let imgs = image_response_json.imgs;
+          console.log(imgs);
+          upperdiv.innerHTML =
+            upperdiv.innerHTML +
+            `<div class="message">
+                <div class="chatbotheader">
+                  <img src="https://psc2.cf2.poecdn.net/e624182724b2f7d087d86e14094be569c56fc207/_next/static/media/assistant.b077c338.svg" alt="chatbotheader" class="chatbotheaderimage" />
+                  <div class="chatbotheadername">Tuan Dep Trai</div>
+                </div>
+                <div class="appmessagediv">
+                    <div class="appmessage" id="temp">
+                    </div>
+                </div>
+            </div>`;
+          let temp = document.getElementById("temp");
+
+          // Loop through urls
+          for (let i = 0; i < imgs.length; i++) {
+            let img = new Image();
+            img.src = "data:image/png;base64," + imgs[i];
+            img.width = 200;
+            temp.appendChild(img);
+
+            // Sleep for 1 second
+            await new Promise((resolve) => setTimeout(resolve, 500));
+            scrollToBottom();
+          }
+          temp.removeAttribute("id");
+          sendbtn.disabled = false;
+          userinputarea.disabled = false;
+        }
+        scrollToBottom();
+      };
+      /*insertImages([
+        "ChatBot/static/000003_1.jpg",
+        "ChatBot/static/000004_1.jpg",
+      ]);*/
+
       function insertMessage() {
         // document.write("Hello ${user}, this is a message!");
         let upperdiv = document.getElementById("upperid");
+        let sendbtn = document.getElementById("sendbtn");
         let userinputarea = document.getElementById("userinput");
+        sendbtn.disabled = true;
+        userinputarea.disabled = true;
         // let user = json.user
         let message = "Hello {{ current_user.name }}, this is a message!";
+        // message = urls
         upperdiv.innerHTML =
           upperdiv.innerHTML +
           `<div class="message">
+                <div class="chatbotheader">
+                  <img src="https://psc2.cf2.poecdn.net/e624182724b2f7d087d86e14094be569c56fc207/_next/static/media/assistant.b077c338.svg" alt="chatbotheader" class="chatbotheaderimage" />
+                  <div class="chatbotheadername">Tuan Dep Trai</div>
+                </div>
                 <div class="appmessagediv">
                     <div class="appmessage" id="temp">
                     </div>
