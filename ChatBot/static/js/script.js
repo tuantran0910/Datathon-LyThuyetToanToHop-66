@@ -385,3 +385,17 @@ function insertMessage() {
     scrollToBottom();
 }
 insertMessage();
+
+function submitOnEnter(event) {
+    console.log("Hello")
+    if (event.which === 13) {
+        if (!event.repeat) {
+            const newEvent = new Event("submit", { cancelable: true });
+            event.target.form.dispatchEvent(newEvent);
+        }
+
+        event.preventDefault(); // Prevents the addition of a new line in the text field
+    }
+}
+
+document.getElementById("userinput").addEventListener("keyup", submitOnEnter);
