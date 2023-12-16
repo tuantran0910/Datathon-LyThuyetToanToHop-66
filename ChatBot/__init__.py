@@ -8,7 +8,7 @@ db = SQLAlchemy()
 
 
 def create_app():
-    app = Flask(__name__)
+    app = Flask(__name__, template_folder='templates')
     CORS(app)
     # app.config['TESTING'] = True
     # app.config['LOGIN_DISABLED'] = True
