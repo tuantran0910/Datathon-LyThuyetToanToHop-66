@@ -5,6 +5,7 @@ from langchain.prompts import PromptTemplate
 from langchain.chains import ConversationChain
 from langchain.memory import ConversationBufferMemory
 import json
+import re
 
 
 def active_func(query, memory):
@@ -24,7 +25,7 @@ def active_func(query, memory):
                 User Input: [{question}]
 
                 List of Functions:
-                1. Description: If user input meaning greeting or hello or hi or hey or good morning or good afternoon or good evening or good night or how are you or how do you do or how are you doing or how is it going or how is everything or how is life or how is your day or how is your day going or how is your day so far or how is your day been or how is your day been going
+                1. Description: If users input meaning greeting such as 'hello' or 'hi' or 'hey' or 'good morning' or 'good afternoon' or good evening or good night or how are you or how do you do or how are you doing or how is it going or how is everything or how is life or how is your day or how is your day going or how is your day so far or how is your day been or how is your day been going
                 Function: greeting
                 
                 2. Description: Refuse to answer the question not related to any function.
@@ -33,14 +34,20 @@ def active_func(query, memory):
                 3. Description: Instructions for uploading photos including personal photos and full-body shots.
                 Function: uploadPose
 
-                4. Descriptionprevious_action: Recommend cloth items in database based on user's input.
+                4. Description: Recommend cloth items in database based on user's input.
                 Function: recommendCloth
 
                 5. Description: Try or fit or make someone look like in i-th cloth item in user's input, which i is index that user want.
                 Function: tryCloth
                 
-                6. Description: If user want to try another or more or again cloth items.
+                6. Description: If users want to try another or more or again cloth items.
                 Function: [{previous_action}]
+                
+                7. Description: Users provide their body measurements such as height, weight, age and sex.
+                Function: predictSize
+                
+                8. Description: Users want to know more information about the cloth item in user's input.
+                Function: showDetail
                 
                 Which function is most closely associated with the provided user input? Choose the corresponding function name from the list."
                 {format_instructions}
@@ -55,13 +62,14 @@ def active_func(query, memory):
 
     model = OpenAI(temperature=0)
     conversation = ConversationChain(
-        llm=model)
+        llm=model, verbose=True)
     _input = prompt.format_prompt(
         question=query, previous_action=previous_action)
     output = conversation(_input.to_string())
 
-    result = json.loads(str(output["response"]).replace('`', '').replace(
-        'json', '').replace('\t', '').replace(' ', '').replace('\n', ''))
+    result = str(output["response"]).replace('`', '').replace(
+        'json', '').replace('\t', '').replace(' ', '').replace('\n', '')
+    result = json.loads(re.search(r'\{(.+?)\}', result).group(0))
     answer = result["answer"]
     number = result["number"]
     if not result == "refuseToAnswer":

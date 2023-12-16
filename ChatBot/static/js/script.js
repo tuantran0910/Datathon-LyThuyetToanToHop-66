@@ -4,11 +4,6 @@ textarea.addEventListener("input", () => {
     textarea.style.height = textarea.scrollHeight + "px";
 });
 
-// for scrolling messages
-/*function scrollToBottom() {
-var div = document.getElementById("upperid");
-div.scrollTop = div.scrollHeight;
-}*/
 function scrollToBottom() {
     textarea.scrollTop = textarea.scrollHeight;
 }
@@ -181,6 +176,10 @@ const formsubmitted = async () => {
         upperdiv.innerHTML =
             upperdiv.innerHTML +
             `<div class="message">
+                    <div class="chatbotheader">
+                        <img src="https://psc2.cf2.poecdn.net/e624182724b2f7d087d86e14094be569c56fc207/_next/static/media/assistant.b077c338.svg" alt="chatbotheader" class="chatbotheaderimage" />
+                        <div class="chatbotheadername">Cloth Poe</div>
+                    </div>
                     <div class="appmessagediv">
                         <div class="appmessage" id="temp">
 
@@ -223,6 +222,10 @@ const formsubmitted = async () => {
         upperdiv.innerHTML =
             upperdiv.innerHTML +
             `<div class="message">
+                    <div class="chatbotheader">
+                        <img src="https://psc2.cf2.poecdn.net/e624182724b2f7d087d86e14094be569c56fc207/_next/static/media/assistant.b077c338.svg" alt="chatbotheader" class="chatbotheaderimage" />
+                        <div class="chatbotheadername">Cloth Poe</div>
+                    </div>
                     <div class="appmessagediv">
                         <div class="appmessage" id="temp">
 
@@ -277,6 +280,10 @@ const formsubmitted = async () => {
             upperdiv.innerHTML =
                 upperdiv.innerHTML +
                 `<div class="message">
+                    <div class="chatbotheader">
+                        <img src="https://psc2.cf2.poecdn.net/e624182724b2f7d087d86e14094be569c56fc207/_next/static/media/assistant.b077c338.svg" alt="chatbotheader" class="chatbotheaderimage" />
+                        <div class="chatbotheadername">Cloth Poe</div>
+                    </div>
                     <div class="appmessagediv">
                         <div class="appmessage" id="temp">
 
@@ -329,7 +336,7 @@ const insertImages = async (urls, message = null) => {
         `<div class="message">
                 <div class="chatbotheader">
                     <img src="https://psc2.cf2.poecdn.net/e624182724b2f7d087d86e14094be569c56fc207/_next/static/media/assistant.b077c338.svg" alt="chatbotheader" class="chatbotheaderimage" />
-                    <div class="chatbotheadername">Tuan Dep Trai</div>
+                    <div class="chatbotheadername">Cloth Poe</div>
                 </div>
                 <div class="appmessagediv">
                     <div class="appmessage" id="temp">
@@ -358,49 +365,6 @@ const insertImages = async (urls, message = null) => {
     temp.removeAttribute("id");
     sendbtn.disabled = false;
     userinputarea.disabled = false;
-
-    /*
-    const formData = new FormData();
-    formData.append("urls", JSON.stringify(urls));
-    // Send relative path to server
-    let image_response = await fetch("http://127.0.0.1:5000/getcloth", {
-        method: "POST",
-        body: formData,
-    });
-
-    let image_response_json = await image_response.json();
-    if (image_response_json.response) {
-        // Get images
-        let imgs = image_response_json.imgs;
-        upperdiv.innerHTML =
-            upperdiv.innerHTML +
-            `<div class="message">
-                <div class="chatbotheader">
-                    <img src="https://psc2.cf2.poecdn.net/e624182724b2f7d087d86e14094be569c56fc207/_next/static/media/assistant.b077c338.svg" alt="chatbotheader" class="chatbotheaderimage" />
-                    <div class="chatbotheadername">Tuan Dep Trai</div>
-                </div>
-                <div class="appmessagediv">
-                    <div class="appmessage" id="temp">
-                    </div>
-                </div>
-            </div>`;
-        let temp = document.getElementById("temp");
-
-        // Loop through urls
-        for (let i = 0; i < imgs.length; i++) {
-            // Sleep for 0.5s
-            await new Promise((resolve) => setTimeout(resolve, 500));
-            let img = new Image();
-            img.src = "data:image/png;base64," + imgs[i];
-            img.width = 200;
-            temp.appendChild(img);
-            scrollToBottom();
-        }
-        temp.removeAttribute("id");
-        sendbtn.disabled = false;
-        userinputarea.disabled = false;
-    }
-    */
     scrollToBottom();
 };
 

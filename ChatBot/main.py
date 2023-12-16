@@ -13,8 +13,9 @@ from ..DM_VTON_new.main import tryon
 from .classes import Suggestion
 from .active_func import active_func
 from .query_cloth import search_item
+from .get_info import full_info
 from dotenv.main import load_dotenv
-from flask import Blueprint, Flask, jsonify, render_template, request, send_from_directory
+from flask import Blueprint, Flask, jsonify, render_template, request, send_from_directory, redirect, url_for
 from langchain.chains import ConversationChain
 from langchain.llms import OpenAI
 from langchain.memory import ConversationBufferMemory, ConversationSummaryBufferMemory
@@ -34,7 +35,8 @@ main = Blueprint('main', __name__)
 
 @main.route('/')
 def index():
-    return render_template('base.html')
+    # return render_template('base.html')
+    return redirect('/chatbot')
 
 
 @main.route('/upload', methods=['POST'])
@@ -104,6 +106,8 @@ def get_data():
             - 1. How to upload images.
             - 2. You can ask for cloth recommendation.
             - 3. You can request to try on a cloth item.
+            - 4. You are welcome to provide body measurements to get a better size recommendation.
+            - 5. You can ask for detail information of a specific cloth item which is recently mentioned.
             """
             output = conversation.predict(input=sorry_input)
             memory.save_context({"input": sorry_input}, {"output": output})
@@ -112,7 +116,9 @@ def get_data():
             return jsonify({"message": str(e), "list": False, "response": False})
 
     elif function_name == "uploadPose":
-        upload_instructions = """Hello World"""
+        upload_instructions = """
+            To ensure you have a great experience, kindly upload your images in accepted file formats such as PNG, JPG, or JPEG. When taking the photo, please maintain straight arms for optimal results. To best assist you, the photo should encompass your entire upper body, from head to knee. If you have any questions, feel free to reach out. We're always here to help!
+        """
         try:
             instruction_input = """
             You have to provide instructions of how to upload photos based on the following format:
@@ -146,10 +152,8 @@ def get_data():
             recommend_img = os.path.join(os.path.dirname(os.path.realpath(
                 __file__)), 'static', 'recommend_img')
 
-            for i, img_url in enumerate(img_urls):
-                destination_path = os.path.join(
-                    recommend_img, f"00000{i + 1}_1.jpg")
-                shutil.copy(data_folder + "/" + img_url, destination_path)
+            for img_url in img_urls:
+                shutil.copy(data_folder + "/" + img_url, recommend_img)
 
             img_urls_rel_path = [data_folder + "/" +
                                  img_url for img_url in img_urls]
@@ -191,37 +195,89 @@ def get_data():
             f.write(pose + " " + recommend_img)
 
         try:
-            
+            print("Try on")
+            # Copy test_pairs.txt in ChatBot/static/try_on to DM_VTON_new/dataset/VITON-Clean/VITON_test
+            shutil.copy(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'static', 'try_on', 'test_pairs.txt'),
+                        os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), 'DM_VTON_new', 'dataset', 'VITON-Clean', 'VITON_test'))
+
+            # Remove all images in test_img folder in DM_VTON_new
+            test_img = os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(
+                __file__))), 'DM_VTON_new', 'dataset', 'VITON-Clean', 'VITON_test', 'test_img')
+            file_list = os.listdir(test_img)
+            for file_name in file_list:
+                file_path = os.path.join(test_img, file_name)
+                os.remove(file_path)
+
+            # Copy pose image in ChatBot/static/pose to DM_VTON_new/dataset/VITON-Clean/VITON_test
+            shutil.copy(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'static', 'pose', pose),
+                        os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), 'DM_VTON_new', 'dataset', 'VITON-Clean', 'VITON_test', 'test_img'))
+
+            img_path = os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(
+                __file__))), 'DM_VTON_new', 'dataset', 'VITON-Clean', 'VITON_test', 'test_img', pose)
+            result = tryon(img_path=img_path)
+            if result:
+                # Copy result try-on image from DM_VTON_new/DMVTON/runs/test/DM-VTON_demo/results/tryon to ChatBot/static/try_on
+                result_img = os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(
+                    __file__))), 'DM_VTON_new', 'DMVTON', 'runs', 'test', 'DM-VTON_demo', 'results', 'tryon')
+                file_list = os.listdir(result_img)
+                result_path = os.path.join(result_img, file_list[0])
+                shutil.copy(result_path, os.path.join(
+                    os.path.dirname(os.path.realpath(__file__)), 'static', 'try_on'))
+
+                # Get relative path of result image
+                result_img_rel_path = os.path.join(os.path.dirname(
+                    os.path.realpath(__file__)), 'static', 'try_on', file_list[0])
+
+                imgs = []
+                with open(result_img_rel_path, 'rb') as f:
+                    image_data = f.read()
+                    base64_data = base64.b64encode(image_data).decode('utf-8')
+                    imgs.append(base64_data)
+
+                return jsonify({"message": "Here is your result", "imgs": imgs, "list": True, "response": True})
+            else:
+                return jsonify({"message": "Sorry, we cannot try on this cloth. Please try another one.", "list": False, "response": True})
         except Exception as e:
             return jsonify({"message": str(e), "list": False, "response": False})
 
         return jsonify({"message": "Please upload your photo", "list": False, "response": True})
 
-    # try:
-    #     output = conversation.predict(input=user_input)
-    #     memory.save_context({"input": user_input}, {"output": output})
-    #     return jsonify({"response": True, "list": False, "message": output})
-    # except Exception as e:
-    #     print(e)
-    #     error_message = f'Error: {str(e)}'
-    #     return jsonify({"message": error_message, "list": False, "response": False})
+    elif function_name == "predictSize":
+        try:
+            size_input = """
+            You have to provide your body measurements as follows:
+            
+            """
+            output = conversation.predict(input=size_input)
+            memory.save_context({"input": size_input}, {"output": output})
+            return jsonify({"response": True, "list": False, "message": output})
+        except Exception as e:
+            return jsonify({"message": str(e), "list": False, "response": False})
+
+    elif function_name == "showDetail":
+        if not idx.isdigit():
+            return jsonify({"message": "Please specify an approriate position for us.", "list": False, "response": True})
+        else:
+            idx = int(idx)
+
+        try:
+            file_list = os.listdir(os.path.join(os.path.dirname(
+                os.path.realpath(__file__)), 'static', 'recommend_img'))
+            file_list.sort()
+
+            selected_img = file_list[idx - 1]
+            print(selected_img)
+            selected_img_path = os.path.join('Cloth', selected_img)
+            color, price, rates, url, material = full_info(selected_img_path)
+
+            return jsonify({"message": f"""Here is the information of the cloth item you requested: Color: {color}, Price: {price}, Rates: {rates}, Material: {material}, URL: {url}""", "list": False, "response": True})
+        except Exception as e:
+            return jsonify({"message": str(e), "list": False, "response": False})
 
 
 @main.route("/chatbot")
 @flask_login.login_required
 def chatbot():
-    # generate appmassage
-    # improve : data class -> dictionaries
-    # suggestion_list = [
-    #     {
-    #         "Title" : "OP 1",
-    #         "Message" : "1 + 1 bang bao nhieu"
-    #     },
-    #     {
-    #         "Title" : "OP 2",
-    #         "Message" : "2 + 1 bang bao nhieu"
-    #     }
-    # ] # content
     return render_template("chatbot.html", suggestion_list=suggestion_list)
 
 

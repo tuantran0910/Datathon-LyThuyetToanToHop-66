@@ -1,5 +1,4 @@
 import os
-from selectors import EpollSelector
 import cv2
 import torch
 import albumentations as albu

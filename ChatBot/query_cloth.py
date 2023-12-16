@@ -3,8 +3,9 @@ from langchain_experimental.agents.agent_toolkits import create_csv_agent
 from langchain.agents.agent_types import AgentType
 from langchain.callbacks import FileCallbackHandler
 from langchain.llms import OpenAI
+import os
 
-CLOTH = 'ChatBot/data/cloth.csv'
+CLOTH = os.path.join(os.path.dirname(__file__), 'data', 'merge_cloth.csv')
 
 
 def search_item(query):
