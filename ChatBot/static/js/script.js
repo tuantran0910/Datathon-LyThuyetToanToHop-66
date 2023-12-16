@@ -121,11 +121,10 @@ function deleteAttachmentSection() {
 
 // sending request to python server
 const formsubmitted = async () => {
-    let userinput = document.getElementById("userinput").value;
+    const userinput = document.getElementById("userinput").value;
     let sendbtn = document.getElementById("sendbtn");
     let userinputarea = document.getElementById("userinput");
     let upperdiv = document.getElementById("upperid");
-
     // Check if userinput is empty and uploadedFiles is empty
     if (userinput.trim() === "" && uploadedFiles.length === 0) {
         return;
@@ -141,30 +140,34 @@ const formsubmitted = async () => {
     }
 
     if (uploadedFiles.length > 0) {
-        console.log("Uploaded files: ", uploadedFiles);
         const image = uploadedFiles[0];
         const reader = new FileReader();
         reader.onload = function (event) {
             upperdiv.innerHTML =
                 upperdiv.innerHTML +
                 `
-        <div class="message">
-        <div class="usermessagediv flex flex-col">
-            <div class="usermessage">
-            <div>${userinput}</div>
-            <img src="${event.target.result}" width="200" class="uploadimg"/>
-            </div>
-        </div>
-        </div>
-    `;
+                    <div class="message">
+                        <div class="usermessagediv flex flex-col">
+                            <div class="usermessage">
+                                <div></div>
+                                <img src="${event.target.result}" width="200" class="uploadimg"/>
+                            </div>
+                        </div>
+                    </div>
+                `;
         };
         reader.readAsDataURL(image);
+
+        // Sleep for 5 seconds
+        await new Promise((resolve) => setTimeout(resolve, 10));
+
+        const userMessages = document.getElementsByClassName("usermessage");
+        const lastUserMessage = userMessages[userMessages.length - 1];
+        lastUserMessage.getElementsByTagName("div")[0].textContent = userinput;
 
         // Send image to server
         const formData = new FormData();
         formData.append("fileInput", image);
-        let userinput = document.getElementById("userinput").value;
-        let sendbtn = document.getElementById("sendbtn");
         const image_response = await fetch("http://127.0.0.1:5000/upload", {
             method: "POST",
             body: formData,
@@ -172,18 +175,43 @@ const formsubmitted = async () => {
 
         let image_response_json = await image_response.json();
         if (!image_response_json.response) {
-            console.error("!Error uploading image");
+            console.log("!Error uploading image");
         }
+        let message = image_response_json.message.trim();
+        upperdiv.innerHTML =
+            upperdiv.innerHTML +
+            `<div class="message">
+                    <div class="appmessagediv">
+                        <div class="appmessage" id="temp">
+
+                        </div>
+                    </div>
+                </div>`;
+        let temp = document.getElementById("temp");
+        let index = 0;
+        function displayNextLetter() {
+            scrollToBottom();
+            if (index < message.length) {
+                temp.innerHTML = temp.innerHTML + message[index];
+                index++;
+                setTimeout(displayNextLetter, 30);
+            } else {
+                temp.removeAttribute("id");
+                sendbtn.disabled = false;
+                userinputarea.disabled = false;
+            }
+        }
+        displayNextLetter();
     } else {
         upperdiv.innerHTML =
             upperdiv.innerHTML +
             `<div class="message">
-        <div class="usermessagediv">
-                <div class="usermessage">
-                    <div>${userinput}</div>
+                <div class="usermessagediv">
+                        <div class="usermessage">
+                            <div>${userinput}</div>
+                        </div>
                 </div>
-        </div>
-    </div>`;
+            </div>`;
     }
 
     if (userinput.trim() === "") {
@@ -191,8 +219,38 @@ const formsubmitted = async () => {
         sendbtn.disabled = false;
         userinputarea.disabled = false;
         uploadedFiles = [];
+        message = message.trim();
+        upperdiv.innerHTML =
+            upperdiv.innerHTML +
+            `<div class="message">
+                    <div class="appmessagediv">
+                        <div class="appmessage" id="temp">
+
+                        </div>
+                    </div>
+                </div>`;
+        let temp = document.getElementById("temp");
+        let index = 0;
+        function displayNextLetter() {
+            scrollToBottom();
+            if (index < message.length) {
+                temp.innerHTML = temp.innerHTML + message[index];
+                index++;
+                setTimeout(displayNextLetter, 30);
+            } else {
+                temp.removeAttribute("id");
+                sendbtn.disabled = false;
+                userinputarea.disabled = false;
+            }
+        }
+        displayNextLetter();
         scrollToBottom();
         return;
+    }
+    else {
+        console.log("Deeeeee");
+        sendbtn.disabled = true;
+        userinputarea.disabled = true;
     }
 
     uploadedFiles = [];
@@ -215,7 +273,7 @@ const formsubmitted = async () => {
         if (message_list) {
             insertImages(imgs, message);
         } else {
-            message = message.toString();
+            message = message.toString().trim();
             upperdiv.innerHTML =
                 upperdiv.innerHTML +
                 `<div class="message">
@@ -266,7 +324,6 @@ const insertImages = async (urls, message = null) => {
     let userinputarea = document.getElementById("userinput");
     sendbtn.disabled = true;
     userinputarea.disabled = true;
-    console.log("Urls: ", urls);
     upperdiv.innerHTML =
         upperdiv.innerHTML +
         `<div class="message">
@@ -347,44 +404,6 @@ const insertImages = async (urls, message = null) => {
     scrollToBottom();
 };
 
-// Initial message
-function insertMessage() {
-    let upperdiv = document.getElementById("upperid");
-    let sendbtn = document.getElementById("sendbtn");
-    let userinputarea = document.getElementById("userinput");
-    sendbtn.disabled = true;
-    userinputarea.disabled = true;
-    let message = "Hello {{ current_user.name }}, this is a message!";
-    upperdiv.innerHTML =
-        upperdiv.innerHTML +
-        `<div class="message">
-        <div class="chatbotheader">
-            <img src="https://psc2.cf2.poecdn.net/e624182724b2f7d087d86e14094be569c56fc207/_next/static/media/assistant.b077c338.svg" alt="chatbotheader" class="chatbotheaderimage" />
-            <div class="chatbotheadername">Tuan Dep Trai</div>
-        </div>
-        <div class="appmessagediv">
-            <div class="appmessage" id="temp">
-            </div>
-        </div>
-    </div>`;
-    let temp = document.getElementById("temp");
-    let index = 0;
-    function displayNextLetter() {
-        scrollToBottom();
-        if (index < message.length) {
-            temp.innerHTML = temp.innerHTML + message[index];
-            index++;
-            setTimeout(displayNextLetter, 30);
-        } else {
-            temp.removeAttribute("id");
-            sendbtn.disabled = false;
-            userinputarea.disabled = false;
-        }
-    }
-    displayNextLetter();
-    scrollToBottom();
-}
-insertMessage();
 
 function submitOnEnter(event) {
     console.log("Hello")

@@ -11,8 +11,8 @@ def active_func(query, memory):
     response_schemas = [
         ResponseSchema(name="answer",
                        description="name of function with required or similar means to user's input"),
-        # ResponseSchema(name="signal",
-        #                 description="signal base on description, should be yes or no.")
+        ResponseSchema(name="number",
+                       description="The ordinal number of the product which is not text that the user desires to try, defaulting to 1.")
     ]
     output_parser = StructuredOutputParser.from_response_schemas(
         response_schemas)
@@ -24,19 +24,22 @@ def active_func(query, memory):
                 User Input: [{question}]
 
                 List of Functions:
-                1. Description: Refuse to answer the question not related to any function.
+                1. Description: If user input meaning greeting or hello or hi or hey or good morning or good afternoon or good evening or good night or how are you or how do you do or how are you doing or how is it going or how is everything or how is life or how is your day or how is your day going or how is your day so far or how is your day been or how is your day been going
+                Function: greeting
+                
+                2. Description: Refuse to answer the question not related to any function.
                 Function: refuseToAnswer
 
-                2. Description: Instructions for uploading photos including personal photos and full-body shots.
+                3. Description: Instructions for uploading photos including personal photos and full-body shots.
                 Function: uploadPose
 
-                3. Descriptionprevious_action: Recommend cloth items in database based on user's input.
+                4. Descriptionprevious_action: Recommend cloth items in database based on user's input.
                 Function: recommendCloth
 
-                4. Description: Try or fit or make someone look like in i-th cloth item in user's input.
+                5. Description: Try or fit or make someone look like in i-th cloth item in user's input, which i is index that user want.
                 Function: tryCloth
                 
-                5. Description: If user want to try another or more or again cloth items.
+                6. Description: If user want to try another or more or again cloth items.
                 Function: [{previous_action}]
                 
                 Which function is most closely associated with the provided user input? Choose the corresponding function name from the list."
@@ -58,15 +61,18 @@ def active_func(query, memory):
     output = conversation(_input.to_string())
 
     result = json.loads(str(output["response"]).replace('`', '').replace(
-        'json', '').replace('\t', '').replace(' ', '').replace('\n', ''))["answer"]
+        'json', '').replace('\t', '').replace(' ', '').replace('\n', ''))
+    answer = result["answer"]
+    number = result["number"]
     if not result == "refuseToAnswer":
-        memory.save_context({"input": query}, {"output": result})
-    return result
+        memory.save_context({"input": query}, {"output": answer})
+    return answer, number
 
 
 if __name__ == "__main__":
     memory = ConversationBufferMemory()
     while True:
         inp = input("Input: ")
-        result = active_func(inp, memory)
-        print(result)
+        answer, number = active_func(inp, memory)
+        print(answer)
+        print(number)

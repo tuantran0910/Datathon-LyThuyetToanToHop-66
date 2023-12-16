@@ -137,5 +137,45 @@
       </div>
     </div>
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script>
+      // Initial message
+      function insertMessage() {
+        let upperdiv = document.getElementById("upperid");
+        let sendbtn = document.getElementById("sendbtn");
+        let userinputarea = document.getElementById("userinput");
+        sendbtn.disabled = true;
+        userinputarea.disabled = true;
+        let message = "Hello {{ current_user.name }}, this is a message!";
+        upperdiv.innerHTML =
+          upperdiv.innerHTML +
+          `<div class="message">
+              <div class="chatbotheader">
+                  <img src="https://psc2.cf2.poecdn.net/e624182724b2f7d087d86e14094be569c56fc207/_next/static/media/assistant.b077c338.svg" alt="chatbotheader" class="chatbotheaderimage" />
+                  <div class="chatbotheadername">Tuan Dep Trai</div>
+              </div>
+              <div class="appmessagediv">
+                  <div class="appmessage" id="temp">
+                  </div>
+              </div>
+          </div>`;
+        let temp = document.getElementById("temp");
+        let index = 0;
+        function displayNextLetter() {
+          scrollToBottom();
+          if (index < message.length) {
+            temp.innerHTML = temp.innerHTML + message[index];
+            index++;
+            setTimeout(displayNextLetter, 30);
+          } else {
+            temp.removeAttribute("id");
+            sendbtn.disabled = false;
+            userinputarea.disabled = false;
+          }
+        }
+        displayNextLetter();
+        scrollToBottom();
+      }
+      insertMessage();
+    </script>
   </body>
 </html>

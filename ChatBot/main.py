@@ -6,6 +6,10 @@ import openai
 import requests
 import dotenv
 import shutil
+from io import BytesIO
+from PIL import Image
+from ..DM_VTON_new.verified_img import verified_input
+from ..DM_VTON_new.core import tryon
 from .classes import Suggestion
 from .active_func import active_func
 from .query_cloth import search_item
@@ -34,16 +38,6 @@ main = Blueprint('main', __name__)
 def index():
     return render_template('base.html')
 
-# @main.route('/print')
-# def print_image(img_urls):
-#     for img_url in img_urls:
-#         # Return json file
-
-#     # Save to static cloth folder and rename xxxxx.jpg
-
-# Aanh -> server upload
-# client : req = anh -> server rec : function upload
-
 
 @main.route('/upload', methods=['POST'])
 def upload_image():
@@ -52,11 +46,19 @@ def upload_image():
     except Exception as e:
         return jsonify({"message": str(e), "response": False})
 
-    # Move the file to the 'static' folder
-    file.save(os.path.join(os.path.abspath(
-        os.path.dirname(__file__)), 'static', file.filename))
+    # Convert file to Image
+    img = Image.open(file.stream)
+
+    # Verify image
+    if not verified_input(img):
+        return jsonify({"message": """Upload unsuccessful! Thank you for choosing our service. We prioritize the highest level of privacy for your data. Unfortunately, your image is not approriate for the system. Please upload a photo with straight arms.""", "response": False})
+    else:
+        print("Accepted!")
+
+    img.save(os.path.join(os.path.abspath(
+        os.path.dirname(__file__)), 'static', 'pose', '000001_0.jpg'))
     # Add userid to the file name
-    return jsonify({"message": "Upload success", "response": True})
+    return jsonify({"message": "Upload successful! Thank you for choosing our service. We prioritize the highest level of privacy for your data.", "response": True})
 
 
 @main.route('/getcloth', methods=['POST'])
@@ -81,16 +83,22 @@ def get_data():
     text = data.get('data')
     user_input = text
 
-    # if user_input.strip().lower() == "random anh":
-    #     imgs = get_random_image()
-    #     print(imgs)
-    #     return jsonify({"message": imgs, "list": True, "response": True})
-
-    function_name = active_func(user_input, memory)
+    function_name, idx = active_func(user_input, memory)
     conversation = ConversationChain(llm=llm, memory=memory)
-    print(function_name)
+    print(function_name, idx)
 
-    if function_name == "refuseToAnswer":
+    if function_name == "greeting":
+        greeting_input = """
+        You receive a greeting input. Please then say hello to user and make an introduction to the user about yourself and your functionailities as a shop assistant.
+        """
+        try:
+            output = conversation.predict(input=greeting_input)
+            memory.save_context({"input": greeting_input}, {"output": output})
+            return jsonify({"response": True, "list": False, "message": output})
+        except Exception as e:
+            return jsonify({"message": str(e), "list": False, "response": False})
+
+    elif function_name == "refuseToAnswer":
         try:
             sorry_input = """
             You receive an input that is beyond the scope of your ability to answer. 
@@ -131,18 +139,23 @@ def get_data():
 
         try:
             img_urls = search_item(user_input)[-1][1]
+
+            if len(img_urls) == 0:
+                return jsonify({"message": "Sorry, we cannot find any suitable clothes for you. Can you describe more details ?", "list": False, "response": True})
+
             data_folder = os.path.join(os.path.dirname(
                 os.path.relpath(__file__)), 'data')
             recommend_img = os.path.join(os.path.dirname(os.path.realpath(
                 __file__)), 'static', 'recommend_img')
 
-            for img_url in img_urls:
-                shutil.copy(data_folder + "/" + img_url, recommend_img)
+            for i, img_url in enumerate(img_urls):
+                destination_path = os.path.join(
+                    recommend_img, f"00000{i + 1}_1.jpg")
+                shutil.copy(data_folder + "/" + img_url, destination_path)
 
             img_urls_rel_path = [data_folder + "/" +
                                  img_url for img_url in img_urls]
 
-            print(img_urls_rel_path)
             imgs = []
             for url in img_urls_rel_path:
                 with open(url, 'rb') as f:
@@ -155,6 +168,35 @@ def get_data():
             return jsonify({"message": str(e), "list": False, "response": False})
 
     elif function_name == "tryCloth":
+        if not idx.isdigit():
+            return jsonify({"message": "Please specify an approriate position for us.", "list": False, "response": True})
+        else:
+            idx = int(idx)
+
+        # Create test_pairs.txt in folder static/try_on
+        with open(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'static', 'try_on', 'test_pairs.txt'), 'w') as f:
+            # Create a combination between pose and recommend_img idx image
+            # Get the file name in pose folder
+            pose_folder = os.path.join(os.path.dirname(os.path.realpath(
+                __file__)), 'static', 'pose')
+            pose_files = os.listdir(pose_folder)
+            pose = pose_files[0]
+
+            # Get the idx-th file name in recommend_img folder
+            recommend_img_folder = os.path.join(os.path.dirname(
+                os.path.realpath(__file__)), 'static', 'recommend_img')
+            recommend_img_files = os.listdir(recommend_img_folder)
+            recommend_img = recommend_img_files.sort()
+            recommend_img = recommend_img_files[idx - 1]
+
+            # Write to test_pairs.txt
+            f.write(pose + " " + recommend_img)
+
+        try:
+            user_input = "What is "
+        except Exception as e:
+            return jsonify({"message": str(e), "list": False, "response": False})
+
         return jsonify({"message": "Please upload your photo", "list": False, "response": True})
 
     # try:
