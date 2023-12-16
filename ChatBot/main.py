@@ -9,7 +9,7 @@ import shutil
 from io import BytesIO
 from PIL import Image
 from ..DM_VTON_new.verified_img import verified_input
-from ..DM_VTON_new.core import tryon
+from ..DM_VTON_new.main import tryon
 from .classes import Suggestion
 from .active_func import active_func
 from .query_cloth import search_item
@@ -21,8 +21,6 @@ from langchain.memory import ConversationBufferMemory, ConversationSummaryBuffer
 
 dotenv.load_dotenv()
 
-# Langchain settings
-# list(map(asdict, suggestion)) # change to dictionary
 suggestion_list = [
     Suggestion('OP1', 'hi'),
     Suggestion('OP2', 'helo')
@@ -193,7 +191,7 @@ def get_data():
             f.write(pose + " " + recommend_img)
 
         try:
-            user_input = "What is "
+            
         except Exception as e:
             return jsonify({"message": str(e), "list": False, "response": False})
 
