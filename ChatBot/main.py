@@ -14,18 +14,17 @@ from .classes import Suggestion
 from .active_func import active_func
 from .query_cloth import search_item
 from .get_info import full_info
+from .return_size_cloth import predict_new_data
 from dotenv.main import load_dotenv
 from flask import Blueprint, Flask, jsonify, render_template, request, send_from_directory, redirect, url_for
 from langchain.chains import ConversationChain
 from langchain.llms import OpenAI
 from langchain.memory import ConversationBufferMemory, ConversationSummaryBufferMemory
-
+from langchain.output_parsers import CommaSeparatedListOutputParser
+from langchain.prompts import PromptTemplate
 dotenv.load_dotenv()
 
-suggestion_list = [
-    Suggestion('OP1', 'hi'),
-    Suggestion('OP2', 'helo')
-]
+
 llm = OpenAI(model="text-davinci-003")
 memory = ConversationSummaryBufferMemory(llm=llm, max_token_limit=100)
 
@@ -244,12 +243,24 @@ def get_data():
 
     elif function_name == "predictSize":
         try:
-            size_input = """
-            You have to provide your body measurements as follows:
-            
-            """
-            output = conversation.predict(input=size_input)
-            memory.save_context({"input": size_input}, {"output": output})
+            output_parser = CommaSeparatedListOutputParser()
+            format_instructions = output_parser.get_format_instructions()
+            prompt = PromptTemplate(
+                template="Get 4 {number} include height, weight, age, sex when base on user's input.\n{format_instructions}",
+                input_variables=['number'],
+                partial_variables={"format_instructions": format_instructions}
+            )
+            model = OpenAI(temperature=0)
+            _input = prompt.format(data=str(user_input))
+            output= model(_input)
+            # output = conversation.run(input=user_input)
+            result = output_parser.parse(output)
+            print("-------,",result)
+            try:
+                Size = predict_new_data(result)
+                print('--------',Size)
+            except:
+                print("Fail")
             return jsonify({"response": True, "list": False, "message": output})
         except Exception as e:
             return jsonify({"message": str(e), "list": False, "response": False})
@@ -278,7 +289,7 @@ def get_data():
 @main.route("/chatbot")
 @flask_login.login_required
 def chatbot():
-    return render_template("chatbot.html", suggestion_list=suggestion_list)
+    return render_template("chatbot.html")
 
 
 @main.route('/profile')

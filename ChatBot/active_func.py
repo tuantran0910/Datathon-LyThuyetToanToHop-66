@@ -62,7 +62,7 @@ def active_func(query, memory):
 
     model = OpenAI(temperature=0)
     conversation = ConversationChain(
-        llm=model, verbose=True)
+        llm=model)
     _input = prompt.format_prompt(
         question=query, previous_action=previous_action)
     output = conversation(_input.to_string())

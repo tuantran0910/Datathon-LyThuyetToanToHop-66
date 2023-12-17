@@ -52,6 +52,7 @@ yarl = "==1.9.2"
 zipp = "==3.15.0"
 flask-sqlalchemy = "*"
 flask-login = "*"
+langchain-experimental = "*"
 
 [dev-packages]
 
