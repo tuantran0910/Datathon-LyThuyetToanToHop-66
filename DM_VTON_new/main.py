@@ -40,7 +40,7 @@ def tryon(img_path="000001_0.jpg"):
             img.save(img_path)
 
         os.system("""python DM_VTON_new/DMVTON/test.py --project DM_VTON_new/DMVTON/runs/test --name DM-VTON_demo \
-                --device 0 --align_corners --batch_size 1 --workers 0 \
+                --device 0 --align_corners --batch_size 1 --workers 1 \
                 --dataroot DM_VTON_new/dataset/VITON-Clean/VITON_test \
                 --pf_warp_checkpoint DM_VTON_new/DMVTON/checkpoints/dmvton_pf_warp.pt \
                 --pf_gen_checkpoint DM_VTON_new/DMVTON/checkpoints/dmvton_pf_gen.pt

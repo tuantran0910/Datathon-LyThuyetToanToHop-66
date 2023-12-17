@@ -7,10 +7,10 @@ import shutil
 import signal
 # init SQLAlchemy so we can use it later in our models
 db = SQLAlchemy()
-app = Flask(__name__, template_folder='templates')
 
 
 def create_app():
+    app = Flask(__name__, template_folder='templates')
     CORS(app)
     # app.config['TESTING'] = True
     # app.config['LOGIN_DISABLED'] = True
@@ -48,8 +48,8 @@ def clear_static_pose_folder(exception=None):
     # Check if an exception occurred during the request
     if exception is None:
         # Clear the contents of the static/pose folder
-        clear_folder(os.path.join(app.root_path, 'static', 'pose'))
-        clear_folder(os.path.join(app.root_path, 'static', 'try_on'))
+        clear_folder(os.path.join(os.path.dirname(__file__), 'static', 'pose'))
+        clear_folder(os.path.join(os.path.dirname(__file__), 'try_on'))
         clear_folder(os.path.join(os.path.dirname(
             os.path.dirname(__file__)), 'DM_VTON_new', 'dataset', 'VITON-Clean', 'VITON_test', 'test_img'))
 
