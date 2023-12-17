@@ -25,7 +25,7 @@
       >
         <a href="#" class="flex items-center">
           <img src={{ url_for('static', filename='DatathonLogo.png') }}
-          class="h-8 mr-3" alt="Flowbite Logo" />
+          class="h-10 mr-3" alt="Flowbite Logo" />
           <span
             class="self-center text-2xl font-bold whitespace-nowrap dark:text-white"
             >LTTTH GPT</span
@@ -51,8 +51,10 @@
             </div>
           </div>
           <div>
-            General-purpose assistant bot with strengths in programming-related
-            tasks and non-English languages. Powered by gpt-3.5-turbo.
+            👋 Hello there! I'm your friendly shopping assistant, here to make
+            your clothing shopping experience a breeze! Just let me know what
+            you're looking for, and I'll do my best to provide you with
+            personalized recommendations and helpful insights.
           </div>
         </div>
 
@@ -142,7 +144,8 @@
         let userinputarea = document.getElementById("userinput");
         sendbtn.disabled = true;
         userinputarea.disabled = true;
-        let message = "Hello {{ current_user.name }}, this is a message!";
+        let message =
+          "Hello {{ current_user.name }}, my name is Poe Cloth. I am here to help you in discovering new clothing items and virtual try on them.";
         upperdiv.innerHTML =
           upperdiv.innerHTML +
           `<div class="message">

@@ -88,7 +88,7 @@ def get_data():
 
     if function_name == "greeting":
         greeting_input = """
-        You receive a greeting input. Please then say hello to user and make an introduction to the user about yourself and your functionailities as a shop assistant.
+        You receive a greeting input. Your name is Cloth Poe. Please then say hello to user and make an introduction to the user about yourself and your functionailities as a shop assistant.
         """
         try:
             output = conversation.predict(input=greeting_input)
@@ -105,8 +105,7 @@ def get_data():
             - 1. How to upload images.
             - 2. You can ask for cloth recommendation.
             - 3. You can request to try on a cloth item.
-            - 4. You are welcome to provide body measurements to get a better size recommendation.
-            - 5. You can ask for detail information of a specific cloth item which is recently mentioned.
+            - 4. You can ask for detail information of a specific cloth item which is recently mentioned.
             """
             output = conversation.predict(input=sorry_input)
             memory.save_context({"input": sorry_input}, {"output": output})
@@ -120,8 +119,8 @@ def get_data():
         """
         try:
             instruction_input = """
-            You have to provide instructions of how to upload photos based on the following format:
-            {}
+            You have to provide instructions of how to upload photos based on the following instructions:
+            {}. Please do not say thank you the user for giving the instruction.
             """.format(upload_instructions)
             output = conversation.predict(input=instruction_input)
             memory.save_context(
@@ -233,7 +232,7 @@ def get_data():
                     base64_data = base64.b64encode(image_data).decode('utf-8')
                     imgs.append(base64_data)
 
-                return jsonify({"message": "Here is your result", "imgs": imgs, "list": True, "response": True})
+                return jsonify({"message": "Here are the results you've been waiting for! My aim is to ensure your utmost satisfaction with both the outcome and your overall experience. I genuinely hope that the results meet or even exceed your expectations.", "imgs": imgs, "list": True, "response": True})
             else:
                 return jsonify({"message": "Sorry, we cannot try on this cloth. Please try another one.", "list": False, "response": True})
         except Exception as e:
@@ -282,6 +281,41 @@ def get_data():
             color, price, rates, url, material = full_info(selected_img_path)
 
             return jsonify({"message": f"""Here is the information of the cloth item you requested: Color: {color}, Price: {price}, Rates: {rates}, Material: {material}, URL: {url}""", "list": False, "response": True})
+        except Exception as e:
+            return jsonify({"message": str(e), "list": False, "response": False})
+
+    elif function_name == "deletePose":
+        try:
+            # Remove all images in pose folder
+            pose_folder = os.path.join(os.path.dirname(os.path.realpath(
+                __file__)), 'static', 'pose')
+            files = os.listdir(pose_folder)
+            for file in files:
+                file_path = os.path.join(pose_folder, file)
+                os.remove(file_path)
+
+            # Remove all images in try_on folder
+            try_on_folder = os.path.join(os.path.dirname(os.path.realpath(
+                __file__)), 'static', 'try_on')
+            files = os.listdir(try_on_folder)
+            for file in files:
+                file_path = os.path.join(try_on_folder, file)
+                os.remove(file_path)
+
+            # Remove all images in DM_VTON_new/dataset/VITON-Clean/VITON_test/test_img
+            test_img_folder = os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(
+                __file__))), 'DM_VTON_new', 'dataset', 'VITON-Clean', 'VITON_test', 'test_img')
+            files = os.listdir(test_img_folder)
+            for file in files:
+                file_path = os.path.join(test_img_folder, file)
+                os.remove(file_path)
+
+            # Remove results folder in DM_VTON_new/DMVTON/runs/test/DM-VTON_demo/results
+            results_folder = os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(
+                __file__))), 'DM_VTON_new', 'DMVTON', 'runs', 'test', 'DM-VTON_demo', 'results')
+            shutil.rmtree(results_folder)
+
+            return jsonify({"message": "Your photo has been deleted successfully. Please upload another photo.", "list": False, "response": True})
         except Exception as e:
             return jsonify({"message": str(e), "list": False, "response": False})
 

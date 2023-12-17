@@ -37,10 +37,10 @@ def active_func(query, memory):
                 4. Description: Recommend cloth items in database based on user's input.
                 Function: recommendCloth
 
-                5. Description: Try or fit or make someone look like in i-th cloth item in user's input, which i is index that user want.
+                5. Description: Try or fit or make someone look like in i-th cloth item in user's input, which i is the order of specific cloth that user want.
                 Function: tryCloth
                 
-                6. Description: If users want to try another or more or again cloth items.
+                6. Description: Users want to repeat again the action or try more or again in try on cloth items.
                 Function: [{previous_action}]
                 
                 7. Description: Users provide their body measurements such as height, weight, age and sex.
@@ -48,6 +48,9 @@ def active_func(query, memory):
                 
                 8. Description: Users want to know more information about the cloth item in user's input.
                 Function: showDetail
+                
+                9. Description: Users want to delete the user's uploaded photo.
+                Function: deletePose
                 
                 Which function is most closely associated with the provided user input? Choose the corresponding function name from the list."
                 {format_instructions}

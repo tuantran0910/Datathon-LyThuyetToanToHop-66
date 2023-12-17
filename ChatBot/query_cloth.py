@@ -9,22 +9,28 @@ CLOTH = os.path.join(os.path.dirname(__file__), 'data', 'merge_cloth.csv')
 
 
 def search_item(query):
-    assistant_target = 'shop management'
-    path = CLOTH
-    agent_kwargs = \
-        {'prefix': f'You are friendly {assistant_target} assistant.'
-         f'questions related to {assistant_target}. You have access to the following tools:'}
+    try:
+        assistant_target = 'shop management'
+        path = CLOTH
+        agent_kwargs = \
+            {'prefix': f'You are friendly {assistant_target} assistant.'
+             f'questions related to {assistant_target}. You have access to the following tools:'}
 
-    agent = create_csv_agent(OpenAI(temperature=0),
-                             path, verbose=True,
-                             return_intermediate_steps=True,
-                             agent_type=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
-                             max_iterations=2,
-                             early_stopping_method="generate",
-                             agent_kwargs=agent_kwargs)
-    result = agent({"input":
-                    query + "or the most similar products then Return list maximun 5 of cloth_path . \
-                    If it did not suitable then Return No"})['intermediate_steps']
+        agent = create_csv_agent(OpenAI(temperature=0),
+                                 path, verbose=True,
+                                 return_intermediate_steps=True,
+                                 agent_type=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
+                                 max_iterations=2,
+                                 early_stopping_method="generate",
+                                 agent_kwargs=agent_kwargs,
+                                 pandas_kwargs={'index_col': 0})
+        result = agent({"input":
+                        query + "or the most similar products then Return list maximum 5 cloth_path . \
+                        If it did not suitable then Return No"})['intermediate_steps']
+        if len(result) > 5:
+            result = result[:5]
+    except Exception as e:
+        result = []
     return result
 
 
