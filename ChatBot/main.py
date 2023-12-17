@@ -54,13 +54,6 @@ def upload_image():
     except Exception as e:
         return jsonify({"message": str(e), "response": False})
 
-<<<<<<< HEAD
-    # Move the file to the 'static' folder
-    file.save(os.path.join(os.path.abspath(
-        os.path.dirname(__file__)), 'static', file.filename))
-    # Add userid to the file name
-    return jsonify({"message": "Upload success", "response": True})
-=======
     # Convert file to Image
     img = Image.open(file.stream)
 
@@ -90,7 +83,6 @@ def get_cloth():
             base64_data = base64.b64encode(image_data).decode('utf-8')
             imgs.append(base64_data)
     return jsonify({"imgs": imgs, "response": True})
->>>>>>> model
 
 
 @main.route('/getcloth', methods=['POST'])
@@ -132,22 +124,6 @@ def get_data():
     text = data.get('data')
     user_input = text
 
-<<<<<<< HEAD
-    if user_input.strip().lower() == "random anh":
-        imgs = get_random_image()
-        print(imgs)
-        return jsonify({"message": imgs, "list": True, "response": True})
-
-    try:
-        conversation = ConversationChain(llm=llm, memory=memory)
-        output = conversation.predict(input=user_input)
-        memory.save_context({"input": user_input}, {"output": output})
-        return jsonify({"response": True, "list": False, "message": output})
-    except Exception as e:
-        print(e)
-        error_message = f'Error: {str(e)}'
-        return jsonify({"message": error_message, "list": False, "response": False})
-=======
     function_name, idx = active_func(user_input, memory)
     conversation = ConversationChain(llm=llm, memory=memory)
     print(function_name, idx)
@@ -384,7 +360,6 @@ def get_data():
             return jsonify({"message": "Your photo has been deleted successfully. Please upload another photo.", "list": False, "response": True})
         except Exception as e:
             return jsonify({"message": str(e), "list": False, "response": False})
->>>>>>> model
 
 
 @main.route("/chatbot")
