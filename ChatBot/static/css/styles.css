@@ -1,0 +1,252 @@
+body {
+  font-family: "Poppins", sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #181818;
+  overflow-y: scroll;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.box {
+  width: min(95%, 800px);
+  margin-top: 85px;
+  padding-top: 20px;
+}
+
+.bottom {
+  position: fixed;
+  bottom: 0;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  width: min(95%, 800px);
+  background-color: #181818;
+}
+
+.message {
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.usermessagediv {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: 5px;
+}
+
+.usermessage {
+  background-color: #097df1;
+  color: #fff;
+  padding: 0.5rem 0.875rem;
+  border-radius: 20px;
+  max-width: 400px;
+  word-wrap: break-word;
+}
+
+.uploadimg {
+  float: left;
+  margin-top: 5px;
+  border-radius: 10px;
+}
+
+.appmessagediv {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  margin-right: 20%;
+}
+
+.appmessage {
+  background-color: #242424;
+  color: white;
+  padding: 0.5rem 0.875rem;
+  border-radius: 20px;
+  max-width: 400px;
+  word-wrap: break-word;
+}
+
+.upper {
+  max-height: 100%;
+  padding-top: 40px;
+  padding-bottom: 170px;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 100px;
+}
+
+.upper::-webkit-scrollbar {
+  width: 0 !important;
+}
+
+#sendbtn:disabled {
+  opacity: 0.6;
+}
+
+.downwarning {
+  display: flex;
+  justify-content: center;
+  margin-top: 5px;
+  font-size: 90%;
+  color: gray;
+}
+
+nav {
+  position: fixed;
+  width: 100%;
+  padding: 3px;
+  box-shadow: 1px 1px 5px #80808057;
+  background-color: #3b3abe;
+}
+
+#userinput {
+  border: none;
+  background: none;
+  resize: none;
+  outline: none;
+  box-shadow: none;
+  max-height: 150px;
+  overflow-y: scroll;
+}
+
+#userinput::-webkit-scrollbar {
+  width: 0 !important;
+}
+
+#fileInput {
+  display: none;
+}
+
+#inputarea {
+  width: 100%;
+  max-width: 100%;
+}
+
+.attachmentList {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+  margin-left: 30px;
+  max-width: 600px;
+  overflow: scroll;
+}
+
+.attachmentsection {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+  background-color: #8d8d8f;
+  border: 2px solid black;
+  border-radius: 5px;
+  max-width: 300px;
+  max-height: 60px;
+}
+
+.attachmentcontent {
+  padding: 5px;
+  overflow: scroll;
+  font-weight: 500;
+}
+
+.attachmentcancel {
+  background-color: gray;
+  color: white;
+  border-left: 2px solid black;
+  padding: 5px;
+  font-size: large;
+  font-weight: 700;
+}
+
+.attachmentcancel:hover {
+  background-color: rgb(177, 175, 175);
+  color: black;
+  transition: cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.botintroduction {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-left: 50px;
+  margin-right: 50px;
+  border-radius: 0.6rem;
+  background-color: #242424;
+  padding: 1rem;
+  color: white;
+}
+
+.botintroduction > div {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.botimage {
+  border-radius: 30%;
+  color: transparent;
+  display: block;
+  border: #313535 5px solid;
+  width: 80px;
+  height: 80px;
+}
+
+.botcontent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.25rem;
+}
+
+.botname {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.botoperated {
+  color: #a5acac;
+}
+
+.teamname {
+  color: #9494fa;
+  font-weight: 700;
+}
+
+.chatbotheader {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  color: white;
+  align-items: center;
+  margin-left: 5px;
+  font-weight: 700;
+}
+
+.chatbotheaderimage {
+  border-radius: 30%;
+  color: transparent;
+  display: block;
+  border: #313535 5px solid;
+  width: 30px;
+  height: 30px;
+}
+
+.boxchat {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 0.5rem 0.875rem;
+  border-radius: 25px;
+  border: 1px solid #d1d5db;
+  color: white;
+}
+
+.attachmentList::-webkit-scrollbar {
+  width: 0 !important;
+}

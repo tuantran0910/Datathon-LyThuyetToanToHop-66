@@ -1,14 +1,16 @@
-from flask import Flask
+from flask import Flask, g
 from flask_cors import CORS
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
-
+import os
+import shutil
+import signal
 # init SQLAlchemy so we can use it later in our models
 db = SQLAlchemy()
 
 
 def create_app():
-    app = Flask(__name__)
+    app = Flask(__name__, template_folder='templates')
     CORS(app)
     # app.config['TESTING'] = True
     # app.config['LOGIN_DISABLED'] = True
@@ -41,6 +43,38 @@ def create_app():
 
     return app
 
+
+def clear_static_pose_folder(exception=None):
+    # Check if an exception occurred during the request
+    if exception is None:
+        # Clear the contents of the static/pose folder
+        clear_folder(os.path.join(os.path.dirname(__file__), 'static', 'pose'))
+        clear_folder(os.path.join(os.path.dirname(__file__), 'try_on'))
+        clear_folder(os.path.join(os.path.dirname(
+            os.path.dirname(__file__)), 'DM_VTON_new', 'dataset', 'VITON-Clean', 'VITON_test', 'test_img'))
+
+# Helper function to clear the contents of a folder
+
+
+def clear_folder(folder_path):
+    for filename in os.listdir(folder_path):
+        file_path = os.path.join(folder_path, filename)
+        try:
+            if os.path.isfile(file_path):
+                os.unlink(file_path)
+            elif os.path.isdir(file_path):
+                os.rmdir(file_path)
+        except Exception as e:
+            print(f"Error clearing {file_path}: {e}")
+
+
+def signal_handler(signum, frame):
+    clear_static_pose_folder()
+    print("Cleanup complete. Exiting...")
+    exit()
+
+
+signal.signal(signal.SIGINT, signal_handler)
 
 if __name__ == '__main__':
     app.run(debug=True)

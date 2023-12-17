@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "cf50f5bfc5abaef95c6b99a35c9c7dccbdb147ea10ef22689affefd2bd5df1aa"
+            "sha256": "648afac13bdc9c808977ee73da4a2a30cb1db37bb4252a8dfb7d943b3ab7845b"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -505,6 +505,15 @@
             "index": "pypi",
             "markers": "python_version < '4.0' and python_full_version >= '3.8.1'",
             "version": "==0.0.273"
+        },
+        "langchain-experimental": {
+            "hashes": [
+                "sha256:14ac7991744bf11a599c5c9ad688d270f12b2368c9b6da01e811ec19b722d26e",
+                "sha256:c53bd25a4c3e3ec6acfe1a908efdc873788eb7513f650db98b6a04202d7842b5"
+            ],
+            "index": "pypi",
+            "markers": "python_version < '4.0' and python_full_version >= '3.8.1'",
+            "version": "==0.0.25"
         },
         "langsmith": {
             "hashes": [
