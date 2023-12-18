@@ -49,9 +49,9 @@ def clear_static_pose_folder(exception=None):
     if exception is None:
         # Clear the contents of the static/pose folder
         clear_folder(os.path.join(os.path.dirname(__file__), 'static', 'pose'))
-        clear_folder(os.path.join(os.path.dirname(__file__), 'try_on'))
-        clear_folder(os.path.join(os.path.dirname(
-            os.path.dirname(__file__)), 'DM_VTON_new', 'dataset', 'VITON-Clean', 'VITON_test', 'test_img'))
+        # clear_folder(os.path.join(os.path.dirname(__file__), 'try_on'))
+        # clear_folder(os.path.join(os.path.dirname(
+        #     os.path.dirname(__file__)), 'DM_VTON_new', 'dataset', 'VITON-Clean', 'VITON_test', 'test_img'))
 
 # Helper function to clear the contents of a folder
 
