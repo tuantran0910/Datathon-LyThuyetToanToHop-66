@@ -6,6 +6,7 @@ import openai
 import requests
 import dotenv
 import shutil
+import random
 from io import BytesIO
 from PIL import Image
 from ..DM_VTON_new.verified_img import verified_input
@@ -141,6 +142,8 @@ def get_data():
 
         try:
             img_urls = search_item(user_input)[-1][1]
+            if len(img_urls) > 5:
+                img_urls = random.sample(list(img_urls), k=5)
 
             if len(img_urls) == 0:
                 return jsonify({"message": "Sorry, we cannot find any suitable clothes for you. Can you describe more details ?", "list": False, "response": True})
@@ -251,13 +254,13 @@ def get_data():
             )
             model = OpenAI(temperature=0)
             _input = prompt.format(data=str(user_input))
-            output= model(_input)
+            output = model(_input)
             # output = conversation.run(input=user_input)
             result = output_parser.parse(output)
-            print("-------,",result)
+            print("-------,", result)
             try:
                 Size = predict_new_data(result)
-                print('--------',Size)
+                print('--------', Size)
             except:
                 print("Fail")
             return jsonify({"response": True, "list": False, "message": output})

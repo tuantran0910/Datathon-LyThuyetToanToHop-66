@@ -4,6 +4,7 @@ from langchain.agents.agent_types import AgentType
 from langchain.callbacks import FileCallbackHandler
 from langchain.llms import OpenAI
 import os
+import random
 
 CLOTH = os.path.join(os.path.dirname(__file__), 'data', 'merge_cloth.csv')
 
@@ -25,10 +26,8 @@ def search_item(query):
                                  agent_kwargs=agent_kwargs,
                                  pandas_kwargs={'index_col': 0})
         result = agent({"input":
-                        query + "or the most similar products then Return list maximum 5 cloth_path . \
+                        query + "or the most similar products then Return full list of cloth_path . \
                         If it did not suitable then Return No"})['intermediate_steps']
-        if len(result) > 5:
-            result = result[:5]
     except Exception as e:
         result = []
     return result
