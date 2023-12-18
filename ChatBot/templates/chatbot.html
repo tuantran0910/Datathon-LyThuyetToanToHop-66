@@ -44,24 +44,17 @@
               class="botimage"
             />
             <div class="botcontent">
-              <<<<<<< HEAD
-              <h2 class="botname">Tuan Dep Trai</h2>
-              =======
               <h2 class="botname">Cloth Poe</h2>
-              >>>>>>> model
               <div class="botoperated">
                 Operated by <span class="teamname">@LTTTH</span>
               </div>
             </div>
           </div>
           <div>
-            <<<<<<< HEAD General-purpose assistant bot with strengths in
-            programming-related tasks and non-English languages. Powered by
-            gpt-3.5-turbo. ======= 👋 Hello there! I'm your friendly shopping
-            assistant, here to make your clothing shopping experience a breeze!
-            Just let me know what you're looking for, and I'll do my best to
-            provide you with personalized recommendations and helpful insights.
-            >>>>>>> model
+            👋 Hello there! I'm your friendly shopping assistant, here to make
+            your clothing shopping experience a breeze! Just let me know what
+            you're looking for, and I'll do my best to provide you with
+            personalized recommendations and helpful insights.
           </div>
         </div>
 
@@ -144,158 +137,157 @@
     </div>
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
     <script>
-      <<<<<<< HEAD
-            const textarea = document.getElementById("userinput");
-            textarea.addEventListener("input", () => {
-              textarea.style.height = "auto";
-              textarea.style.height = textarea.scrollHeight + "px";
-            });
+      const textarea = document.getElementById("userinput");
+      textarea.addEventListener("input", () => {
+        textarea.style.height = "auto";
+        textarea.style.height = textarea.scrollHeight + "px";
+      });
 
-            // for scrolling messages
-            /*function scrollToBottom() {
+      // for scrolling messages
+      /*function scrollToBottom() {
               var div = document.getElementById("upperid");
               div.scrollTop = div.scrollHeight;
             }*/
-            function scrollToBottom() {
-              var body = document.body;
-              body.scrollTop = body.scrollHeight;
-            }
-            scrollToBottom();
+      function scrollToBottom() {
+        var body = document.body;
+        body.scrollTop = body.scrollHeight;
+      }
+      scrollToBottom();
 
-            // for submiting form
-            document
-              .getElementById("userinputform")
-              .addEventListener("submit", function (event) {
-                event.preventDefault();
-                formsubmitted();
-              });
+      // for submiting form
+      document
+        .getElementById("userinputform")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+          formsubmitted();
+        });
 
-            // for suggestions
-            function onclickSuggestion(message) {
-              let userinput = document.getElementById("userinput");
-              userinput.value = message;
-              formsubmitted();
-              document.querySelector(".suggestions").remove();
-            }
+      // for suggestions
+      function onclickSuggestion(message) {
+        let userinput = document.getElementById("userinput");
+        userinput.value = message;
+        formsubmitted();
+        document.querySelector(".suggestions").remove();
+      }
 
-            // for upload file
-            var uploadedFiles = [];
-            function uploadFile() {
-              // Only allow one file to be uploaded
-              if (uploadedFiles.length > 0) {
-                alert("Only one file can be uploaded");
-                return;
+      // for upload file
+      var uploadedFiles = [];
+      function uploadFile() {
+        // Only allow one file to be uploaded
+        if (uploadedFiles.length > 0) {
+          alert("Only one file can be uploaded");
+          return;
+        }
+
+        const input = document.createElement("input");
+        input.type = "file";
+        input.accept = "image/png, image/jpeg, image/jpg";
+        input.onchange = function (event) {
+          const file = event.target.files[0];
+
+          if (file) {
+            if (file.size <= 5 * 1024 * 1024) {
+              // Append to uploadedFiles
+              uploadedFiles.push(file);
+
+              // Get the inputarea div
+              const inputareaDiv = document.getElementById("inputarea");
+
+              if (
+                document.getElementsByClassName("attachmentList").length == 0
+              ) {
+                console.log("Not exist attachment list");
+                // Create the attachment list div
+                const attachmentListDiv = document.createElement("div");
+                attachmentListDiv.classList.add("attachmentList");
+                inputareaDiv.appendChild(attachmentListDiv);
               }
 
-              const input = document.createElement("input");
-              input.type = "file";
-              input.accept = "image/png, image/jpeg, image/jpg";
-              input.onchange = function (event) {
-                const file = event.target.files[0];
-
-                if (file) {
-                  if (file.size <= 5 * 1024 * 1024) {
-                    // Append to uploadedFiles
-                    uploadedFiles.push(file);
-
-                    // Get the inputarea div
-                    const inputareaDiv = document.getElementById("inputarea");
-
-                    if (
-                      document.getElementsByClassName("attachmentList").length == 0
-                    ) {
-                      console.log("Not exist attachment list");
-                      // Create the attachment list div
-                      const attachmentListDiv = document.createElement("div");
-                      attachmentListDiv.classList.add("attachmentList");
-                      inputareaDiv.appendChild(attachmentListDiv);
-                    }
-
-                    // Get the attachment list div
-                    const attachmentListDiv =
-                      document.getElementsByClassName("attachmentList")[0];
-
-                    // Create the attachment div
-                    const attachmentDiv = document.createElement("div");
-                    attachmentDiv.className = "attachmentsection";
-                    attachmentListDiv.appendChild(attachmentDiv);
-
-                    // Create the attachment content
-                    const attachmentcontent = document.createElement("div");
-                    attachmentcontent.textContent = `${file.name} (${file.size})`;
-                    attachmentcontent.className = "attachmentcontent";
-                    attachmentDiv.appendChild(attachmentcontent);
-
-                    // Create the attachment cancel button
-                    const attachmentcancel = document.createElement("button");
-                    attachmentcancel.textContent = "X";
-                    attachmentcancel.className = "attachmentcancel";
-                    attachmentcancel.type = "button";
-                    attachmentcancel.onclick = function (event) {
-                      deleteAttachment(event);
-                    };
-                    attachmentDiv.appendChild(attachmentcancel);
-                  } else {
-                    alert("File size must be less than 5MB");
-                  }
-                } else {
-                  alert("File not available");
-                }
-              };
-              input.click();
-            }
-
-            // Delete attachment
-            function deleteAttachment(event) {
-              const attachmentDiv = event.target.parentNode;
-              const attachmentListDiv = attachmentDiv.parentNode;
-              attachmentListDiv.removeChild(attachmentDiv);
-
-              // Remove from uploadedFiles
-              const attachmentcontent =
-                attachmentDiv.getElementsByClassName("attachmentcontent")[0];
-              const fileName = attachmentcontent.textContent.split(" ")[0];
-              const fileIndex = uploadedFiles.findIndex(
-                (file) => file.name === fileName
-              );
-              uploadedFiles.splice(fileIndex, 1);
-            }
-
-            function deleteAttachmentSection() {
+              // Get the attachment list div
               const attachmentListDiv =
                 document.getElementsByClassName("attachmentList")[0];
-              attachmentListDiv.parentNode.removeChild(attachmentListDiv);
+
+              // Create the attachment div
+              const attachmentDiv = document.createElement("div");
+              attachmentDiv.className = "attachmentsection";
+              attachmentListDiv.appendChild(attachmentDiv);
+
+              // Create the attachment content
+              const attachmentcontent = document.createElement("div");
+              attachmentcontent.textContent = `${file.name} (${file.size})`;
+              attachmentcontent.className = "attachmentcontent";
+              attachmentDiv.appendChild(attachmentcontent);
+
+              // Create the attachment cancel button
+              const attachmentcancel = document.createElement("button");
+              attachmentcancel.textContent = "X";
+              attachmentcancel.className = "attachmentcancel";
+              attachmentcancel.type = "button";
+              attachmentcancel.onclick = function (event) {
+                deleteAttachment(event);
+              };
+              attachmentDiv.appendChild(attachmentcancel);
+            } else {
+              alert("File size must be less than 5MB");
             }
+          } else {
+            alert("File not available");
+          }
+        };
+        input.click();
+      }
 
-            // sending request to python server
-            const formsubmitted = async () => {
-              let userinput = document.getElementById("userinput").value;
-              let sendbtn = document.getElementById("sendbtn");
-              let userinputarea = document.getElementById("userinput");
-              let upperdiv = document.getElementById("upperid");
+      // Delete attachment
+      function deleteAttachment(event) {
+        const attachmentDiv = event.target.parentNode;
+        const attachmentListDiv = attachmentDiv.parentNode;
+        attachmentListDiv.removeChild(attachmentDiv);
 
-              // Check if userinput is empty and uploadedFiles is empty
-              if (userinput.trim() === "" && uploadedFiles.length === 0) {
-                return;
-              }
+        // Remove from uploadedFiles
+        const attachmentcontent =
+          attachmentDiv.getElementsByClassName("attachmentcontent")[0];
+        const fileName = attachmentcontent.textContent.split(" ")[0];
+        const fileIndex = uploadedFiles.findIndex(
+          (file) => file.name === fileName
+        );
+        uploadedFiles.splice(fileIndex, 1);
+      }
 
-              sendbtn.disabled = true;
-              userinputarea.disabled = true;
-              document.getElementById("userinput").value = "";
-              document.getElementById("userinput").placeholder = "Wait . . .";
+      function deleteAttachmentSection() {
+        const attachmentListDiv =
+          document.getElementsByClassName("attachmentList")[0];
+        attachmentListDiv.parentNode.removeChild(attachmentListDiv);
+      }
 
-              if (document.getElementsByClassName("attachmentList").length > 0) {
-                deleteAttachmentSection();
-              }
+      // sending request to python server
+      const formsubmitted = async () => {
+        let userinput = document.getElementById("userinput").value;
+        let sendbtn = document.getElementById("sendbtn");
+        let userinputarea = document.getElementById("userinput");
+        let upperdiv = document.getElementById("upperid");
 
-              if (uploadedFiles.length > 0) {
-                console.log("Uploaded files: ", uploadedFiles);
-                const image = uploadedFiles[0];
-                const reader = new FileReader();
-                reader.onload = function (event) {
-                  upperdiv.innerHTML =
-                    upperdiv.innerHTML +
-                    `
+        // Check if userinput is empty and uploadedFiles is empty
+        if (userinput.trim() === "" && uploadedFiles.length === 0) {
+          return;
+        }
+
+        sendbtn.disabled = true;
+        userinputarea.disabled = true;
+        document.getElementById("userinput").value = "";
+        document.getElementById("userinput").placeholder = "Wait . . .";
+
+        if (document.getElementsByClassName("attachmentList").length > 0) {
+          deleteAttachmentSection();
+        }
+
+        if (uploadedFiles.length > 0) {
+          console.log("Uploaded files: ", uploadedFiles);
+          const image = uploadedFiles[0];
+          const reader = new FileReader();
+          reader.onload = function (event) {
+            upperdiv.innerHTML =
+              upperdiv.innerHTML +
+              `
                     <div class="message">
                       <div class="usermessagediv flex flex-col">
                         <div class="usermessage">
@@ -305,131 +297,131 @@
                       </div>
                     </div>
                   `;
-                };
-                reader.readAsDataURL(image);
+          };
+          reader.readAsDataURL(image);
 
-                // Send image to server
-                const formData = new FormData();
-                formData.append("fileInput", image);
-                let userinput = document.getElementById("userinput").value;
-                let sendbtn = document.getElementById("sendbtn");
-                console.log(formData);
-                const image_response = await fetch("http://127.0.0.1:5000/upload", {
-                  method: "POST",
-                  body: formData,
-                });
+          // Send image to server
+          const formData = new FormData();
+          formData.append("fileInput", image);
+          let userinput = document.getElementById("userinput").value;
+          let sendbtn = document.getElementById("sendbtn");
+          console.log(formData);
+          const image_response = await fetch("http://127.0.0.1:5000/upload", {
+            method: "POST",
+            body: formData,
+          });
 
-                /*let image_response_json = await image_response.json();
+          /*let image_response_json = await image_response.json();
                 if (!image_response_json.response) {
                   alert(image_response_json.message);
                 }*/
-              } else {
-                upperdiv.innerHTML =
-                  upperdiv.innerHTML +
-                  `<div class="message">
+        } else {
+          upperdiv.innerHTML =
+            upperdiv.innerHTML +
+            `<div class="message">
                       <div class="usermessagediv">
                             <div class="usermessage">
                                 <div>${userinput}</div>
                             </div>
                       </div>
                   </div>`;
-              }
+        }
 
-              if (userinput.trim() === "") {
-                document.getElementById("userinput").placeholder = "Your message...";
-                sendbtn.disabled = false;
-                userinputarea.disabled = false;
-                uploadedFiles = [];
-                scrollToBottom();
-                return;
-              }
+        if (userinput.trim() === "") {
+          document.getElementById("userinput").placeholder = "Your message...";
+          sendbtn.disabled = false;
+          userinputarea.disabled = false;
+          uploadedFiles = [];
+          scrollToBottom();
+          return;
+        }
 
-              uploadedFiles = [];
-              scrollToBottom();
-              const message_response = await fetch("http://127.0.0.1:5000/data", {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ data: userinput }),
-              });
+        uploadedFiles = [];
+        scrollToBottom();
+        const message_response = await fetch("http://127.0.0.1:5000/data", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ data: userinput }),
+        });
 
-              let message_response_json = await message_response.json();
-              document.getElementById("userinput").placeholder = "Your message...";
-              if (message_response_json.response) {
-                let message = message_response_json.message;
-                let message_list = message_response_json.list;
+        let message_response_json = await message_response.json();
+        document.getElementById("userinput").placeholder = "Your message...";
+        if (message_response_json.response) {
+          let message = message_response_json.message;
+          let message_list = message_response_json.list;
 
-                if (message_list) {
-                  insertImages(message);
-                } else {
-                  message = message.toString();
-                  upperdiv.innerHTML =
-                    upperdiv.innerHTML +
-                    `<div class="message">
+          if (message_list) {
+            insertImages(message);
+          } else {
+            message = message.toString();
+            upperdiv.innerHTML =
+              upperdiv.innerHTML +
+              `<div class="message">
                       <div class="appmessagediv">
                           <div class="appmessage" id="temp">
 
                           </div>
                       </div>
                   </div>`;
-                  let temp = document.getElementById("temp");
-                  let index = 0;
-                  function displayNextLetter() {
-                    scrollToBottom();
-                    if (index < message.length) {
-                      temp.innerHTML = temp.innerHTML + message[index];
-                      index++;
-                      setTimeout(displayNextLetter, 30);
-                    } else {
-                      temp.removeAttribute("id");
-                      sendbtn.disabled = false;
-                      userinputarea.disabled = false;
-                    }
-                  }
-                  displayNextLetter();
-                }
-                scrollToBottom();
+            let temp = document.getElementById("temp");
+            let index = 0;
+            function displayNextLetter() {
+              scrollToBottom();
+              if (index < message.length) {
+                temp.innerHTML = temp.innerHTML + message[index];
+                index++;
+                setTimeout(displayNextLetter, 30);
               } else {
-                let message = message_response_json.message;
-                upperdiv.innerHTML =
-                  upperdiv.innerHTML +
-                  `<div class="message">
+                temp.removeAttribute("id");
+                sendbtn.disabled = false;
+                userinputarea.disabled = false;
+              }
+            }
+            displayNextLetter();
+          }
+          scrollToBottom();
+        } else {
+          let message = message_response_json.message;
+          upperdiv.innerHTML =
+            upperdiv.innerHTML +
+            `<div class="message">
                       <div class="appmessagediv">
                           <div class="appmessage"  style="border: 1px solid red;">
                               ${message}
                           </div>
                       </div>
                   </div>`;
-                sendbtn.disabled = false;
-                userinputarea.disabled = false;
-              }
-              scrollToBottom();
-            };
+          sendbtn.disabled = false;
+          userinputarea.disabled = false;
+        }
+        scrollToBottom();
+      };
 
-            const insertImages = async (urls) => {
-              let upperdiv = document.getElementById("upperid");
-              let sendbtn = document.getElementById("sendbtn");
-              let userinputarea = document.getElementById("userinput");
-              sendbtn.disabled = true;
-              userinputarea.disabled = true;
+      const insertImages = async (urls) => {
+        let upperdiv = document.getElementById("upperid");
+        let sendbtn = document.getElementById("sendbtn");
+        let userinputarea = document.getElementById("userinput");
+        sendbtn.disabled = true;
+        userinputarea.disabled = true;
 
-              const formData = new FormData();
-              formData.append("urls", JSON.stringify(urls));
-              // Send urls to server
-              let image_response = await fetch("http://127.0.0.1:5000/getcloth", {
-                method: "POST",
-                body: formData,
-              });
+        const formData = new FormData();
+        formData.append("urls", JSON.stringify(urls));
+        // Send urls to server
+        let image_response = await fetch("http://127.0.0.1:5000/getcloth", {
+          method: "POST",
+          body: formData,
+        });
 
-              let image_response_json = await image_response.json();
-              console.log(image_response_json);
-              if (image_response_json.response) {
-                let imgs = image_response_json.imgs;
-                console.log(imgs);
-                upperdiv.innerHTML =
-                  upperdiv.innerHTML +
-                  `<div class="message">
+        let image_response_json = await image_response.json();
+        console.log(image_response_json);
+        if (image_response_json.response) {
+          let imgs = image_response_json.imgs;
+          console.log(imgs);
+          upperdiv.innerHTML =
+            upperdiv.innerHTML +
+            `<div class="message">
                       <div class="chatbotheader">
                         <img src="https://psc2.cf2.poecdn.net/e624182724b2f7d087d86e14094be569c56fc207/_next/static/media/assistant.b077c338.svg" alt="chatbotheader" class="chatbotheaderimage" />
                         <div class="chatbotheadername">Tuan Dep Trai</div>
@@ -439,43 +431,43 @@
                           </div>
                       </div>
                   </div>`;
-                let temp = document.getElementById("temp");
+          let temp = document.getElementById("temp");
 
-                // Loop through urls
-                for (let i = 0; i < imgs.length; i++) {
-                  let img = new Image();
-                  img.src = "data:image/png;base64," + imgs[i];
-                  img.width = 200;
-                  temp.appendChild(img);
+          // Loop through urls
+          for (let i = 0; i < imgs.length; i++) {
+            let img = new Image();
+            img.src = "data:image/png;base64," + imgs[i];
+            img.width = 200;
+            temp.appendChild(img);
 
-                  // Sleep for 1 second
-                  await new Promise((resolve) => setTimeout(resolve, 500));
-                  scrollToBottom();
-                }
-                temp.removeAttribute("id");
-                sendbtn.disabled = false;
-                userinputarea.disabled = false;
-              }
-              scrollToBottom();
-            };
-            /*insertImages([
+            // Sleep for 1 second
+            await new Promise((resolve) => setTimeout(resolve, 500));
+            scrollToBottom();
+          }
+          temp.removeAttribute("id");
+          sendbtn.disabled = false;
+          userinputarea.disabled = false;
+        }
+        scrollToBottom();
+      };
+      /*insertImages([
               "ChatBot/static/000003_1.jpg",
               "ChatBot/static/000004_1.jpg",
             ]);*/
 
-            function insertMessage() {
-              // document.write("Hello ${user}, this is a message!");
-              let upperdiv = document.getElementById("upperid");
-              let sendbtn = document.getElementById("sendbtn");
-              let userinputarea = document.getElementById("userinput");
-              sendbtn.disabled = true;
-              userinputarea.disabled = true;
-              // let user = json.user
-              let message = "Hello {{ current_user.name }}, this is a message!";
-              // message = urls
-              upperdiv.innerHTML =
-                upperdiv.innerHTML +
-                `<div class="message">
+      function insertMessage() {
+        // document.write("Hello ${user}, this is a message!");
+        let upperdiv = document.getElementById("upperid");
+        let sendbtn = document.getElementById("sendbtn");
+        let userinputarea = document.getElementById("userinput");
+        sendbtn.disabled = true;
+        userinputarea.disabled = true;
+        // let user = json.user
+        let message = "Hello {{ current_user.name }}, this is a message!";
+        // message = urls
+        upperdiv.innerHTML =
+          upperdiv.innerHTML +
+          `<div class="message">
                       <div class="chatbotheader">
                         <img src="https://psc2.cf2.poecdn.net/e624182724b2f7d087d86e14094be569c56fc207/_next/static/media/assistant.b077c338.svg" alt="chatbotheader" class="chatbotheaderimage" />
                         <div class="chatbotheadername">Tuan Dep Trai</div>
@@ -485,47 +477,24 @@
                           </div>
                       </div>
                   </div>`;
-      =======
-            // Initial message
-            function insertMessage() {
-              let upperdiv = document.getElementById("upperid");
-              let sendbtn = document.getElementById("sendbtn");
-              let userinputarea = document.getElementById("userinput");
-              sendbtn.disabled = true;
-              userinputarea.disabled = true;
-              let message =
-                "Hello {{ current_user.name }}, my name is Poe Cloth. I am here to help you in discovering new clothing items and virtual try on them.";
-              upperdiv.innerHTML =
-                upperdiv.innerHTML +
-                `<div class="message">
-                    <div class="chatbotheader">
-                        <img src="https://psc2.cf2.poecdn.net/e624182724b2f7d087d86e14094be569c56fc207/_next/static/media/assistant.b077c338.svg" alt="chatbotheader" class="chatbotheaderimage" />
-                        <div class="chatbotheadername">Cloth Poe</div>
-                    </div>
-                    <div class="appmessagediv">
-                        <div class="appmessage" id="temp">
-                        </div>
-                    </div>
-                </div>`;
-      >>>>>>> model
-              let temp = document.getElementById("temp");
-              let index = 0;
-              function displayNextLetter() {
-                scrollToBottom();
-                if (index < message.length) {
-                  temp.innerHTML = temp.innerHTML + message[index];
-                  index++;
-                  setTimeout(displayNextLetter, 30);
-                } else {
-                  temp.removeAttribute("id");
-                  sendbtn.disabled = false;
-                  userinputarea.disabled = false;
-                }
-              }
-              displayNextLetter();
-              scrollToBottom();
-            }
-            insertMessage();
+        let temp = document.getElementById("temp");
+        let index = 0;
+        function displayNextLetter() {
+          scrollToBottom();
+          if (index < message.length) {
+            temp.innerHTML = temp.innerHTML + message[index];
+            index++;
+            setTimeout(displayNextLetter, 30);
+          } else {
+            temp.removeAttribute("id");
+            sendbtn.disabled = false;
+            userinputarea.disabled = false;
+          }
+        }
+        displayNextLetter();
+        scrollToBottom();
+      }
+      insertMessage();
     </script>
   </body>
 </html>

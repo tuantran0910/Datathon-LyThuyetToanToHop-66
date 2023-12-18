@@ -86,22 +86,6 @@ def get_cloth():
     return jsonify({"imgs": imgs, "response": True})
 
 
-@main.route('/getcloth', methods=['POST'])
-def get_cloth():
-    try:
-        urls = json.loads(request.form['urls'])
-        print(urls)
-    except Exception as e:
-        return jsonify({"message": str(e), "response": False})
-    imgs = []
-    for url in urls:
-        with open(url, 'rb') as f:
-            image_data = f.read()
-            base64_data = base64.b64encode(image_data).decode('utf-8')
-            imgs.append(base64_data)
-    return jsonify({"imgs": imgs, "response": True})
-
-
 def get_random_image(num=3):
     # Get the relative path of 3 random images in static folder
     static_folder = os.path.join(os.path.dirname(
